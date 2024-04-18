@@ -1,0 +1,58 @@
+image: hashicorp/terraform:1.7.4
+
+pipelines:
+  branches:
+    feat/*:
+      - step:
+          ## Terraform Liniting
+          name: Terraform Linting
+          script:
+            - wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
+            - unzip tflint_linux_amd64.zip
+            - chmod +x tflint
+            - ./tflint --version
+            - ./tflint
+      - step:
+          name: Terraform Plan
+          script:
+            - echo $GOOGLE_APPLICATION_CREDENTIALS > /tmp/credentials.json
+            - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/credentials.json"
+            - terraform init
+            - chmod +x -R .terraform/providers/registry.terraform.io/hashicorp/google/
+            - terraform plan -out=tfplan
+
+          artifacts:
+            - tfplan
+
+    master:
+      - step:
+          ## Terraform Liniting
+          name: Terraform Linting
+          script:
+            - wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
+            - unzip tflint_linux_amd64.zip
+            - chmod +x tflint
+            - ./tflint --version
+            - ./tflint
+
+      - step:
+          name: Terraform Plan
+          script:
+            - echo $GOOGLE_APPLICATION_CREDENTIALS > /tmp/credentials.json
+            - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/credentials.json"
+            - terraform init
+            - chmod +x -R .terraform/providers/registry.terraform.io/hashicorp/google/
+            - terraform plan -out=tfplan
+
+          artifacts:
+            - tfplan
+
+      - step:
+          name: Terraform Apply
+          script:
+            - echo $GOOGLE_APPLICATION_CREDENTIALS > /tmp/credentials.json
+            - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/credentials.json"
+            - terraform init
+            - chmod +x -R .terraform/providers/registry.terraform.io/hashicorp/google/
+            - terraform apply -auto-approve tfplan
+  
