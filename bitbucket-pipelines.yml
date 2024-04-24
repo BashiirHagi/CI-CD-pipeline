@@ -4,7 +4,7 @@ pipelines:
   branches:
     feat/*:
       - step:
-          ## Terraform Liniting
+          ## Terraform Linting
           name: Terraform Linting
           script:
             - wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
@@ -12,6 +12,13 @@ pipelines:
             - chmod +x tflint
             - ./tflint --version
             - ./tflint
+
+      - step:
+          name: Checkov
+          image: bridgecrew/checkov:latest
+          script:
+           - checkov -d terraform/
+      
       - step:
           name: Terraform Plan
           script:
@@ -19,14 +26,12 @@ pipelines:
             - export GOOGLE_APPLICATION_CREDENTIALS="/tmp/credentials.json"
             - terraform init
             - chmod +x -R .terraform/providers/registry.terraform.io/hashicorp/google/
-            - terraform plan -out=tfplan
+            - terraform plan
 
-          artifacts:
-            - tfplan
 
     master:
       - step:
-          ## Terraform Liniting
+          ## Terraform Linting
           name: Terraform Linting
           script:
             - wget https://github.com/terraform-linters/tflint/releases/latest/download/tflint_linux_amd64.zip
@@ -45,7 +50,7 @@ pipelines:
             - terraform plan -out=tfplan
 
           artifacts:
-            - tfplan
+           - tfplan
 
       - step:
           name: Terraform Apply
