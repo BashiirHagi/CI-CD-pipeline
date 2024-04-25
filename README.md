@@ -6,4 +6,4 @@ Feature branch performs terraform linting/checkov checks for validation and secu
 
 Master branch perform the terraform linting, terraform plan and terraform apply step to deploy changes to the target environment. 
 
-Environment variables are used GOOGLE_APPLICATION_CREDENTIAL to store security keys and connect the pipleine to the Google Cloud Platform account. This is to ensure security and manageability of the account, and to avoid using plain-text keys which can be compromised. 
+Environment variables GOOGLE_APPLICATION_CREDENTIAL used to store security keys and connect the pipleine to the Google Cloud Platform account. This is to ensure security and manageability of the account keys, and to avoid using plain-text keys which can be compromised. 
