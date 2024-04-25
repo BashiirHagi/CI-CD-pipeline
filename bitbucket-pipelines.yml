@@ -2,7 +2,7 @@ image: hashicorp/terraform:1.7.4
 
 pipelines:
   branches:
-    feat/*:
+    '**':
       - step:
           ## Terraform Linting
           name: Terraform Linting
